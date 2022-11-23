@@ -81,4 +81,39 @@ public class slang_Function {
         fw.write(buf);
         fw.close();
     }
+    public void addSlang(Map<String, ArrayList<String>> slang) {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("nhap slang can them:");
+        this.Search = sc.nextLine();
+        if (slang.containsKey(Search)) {
+            int i;
+            System.out.println("Slang da ton tai vui long lua chon:");
+            System.out.println("1. ghi de Slang cu");
+            System.out.println("2. them Slang moi");
+            i = sc.nextInt();
+            if (i == 1) {
+                System.out.println("nhap definition:");
+                ArrayList<String> def = slang.get(Search);
+                String add = sc.nextLine();
+                def.add(add);
+                slang.remove(Search);
+                slang.put(Search, def);
+            }
+            if (i == 2) {
+                System.out.println("nhap definition:");
+                ArrayList<String> def = new ArrayList<>();
+                String add = sc.nextLine();
+                def.add(add);
+                String dup=Search + "new";
+                slang.put(dup, def);
+            }
+        }
+        else{
+            System.out.println("nhap definition:");
+            ArrayList<String> def = new ArrayList<>();
+            String add = sc.nextLine();
+            def.add(add);
+            slang.put(Search, def);
+        }
+    }
 }
