@@ -40,14 +40,19 @@ public class file_Slang {
         return result;
     }
 
-    public static void ReadFile(Map<String, ArrayList<String>> s) throws IOException{
+    public  String[][] Read_History() throws IOException{
         BufferedReader br = new BufferedReader(new FileReader("history.txt"));
-        String temp;
-        while ((temp = br.readLine()) != null){
-            System.out.println(temp);
+        String temp[]=new String[1000];
+        String ans[][]=new String[1000][3];
+        String text;
+        int i=0;
+        while ((text = br.readLine()) != null){
+            String[] token = text.split("(-)");
+            ans[i][0]=token[0];
+            ans[i][1]=token[1];
+            ans[i][2]=token[2];
+            i++;
         }
-
+        return ans;
     }
-
 }
-
