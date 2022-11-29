@@ -148,14 +148,14 @@ public class GUI_Quiz   extends JFrame implements ActionListener{
                         }
                         i++;
                     }
-                    int n = JOptionPane.showOptionDialog(null, "What does " + quest + " mean?"
+                    int n = JOptionPane.showOptionDialog(null, "Nghĩa của " + quest + " là?"
                             , "Slang Quiz",0,JOptionPane.QUESTION_MESSAGE, null,def_ans,def_ans[0]);
                     if (n!= -1) {
                         if (def_ans[n].equals(ans)) {
-                            JOptionPane.showMessageDialog(null, "Correct Answer!!!");
+                            JOptionPane.showMessageDialog(null, "Chính xác!!!");
                         } else {
-                            JOptionPane.showMessageDialog(null,"Wrong, correct answer for " + quest
-                                    + " is\n - " + ans,"Failed",0);
+                            JOptionPane.showMessageDialog(null,"Đáp án sai " + quest
+                                    + " nghĩa là:\n - " + ans,"Failed",0);
                         }
                     }
                 }

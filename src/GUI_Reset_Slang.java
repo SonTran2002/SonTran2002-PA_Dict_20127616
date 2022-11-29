@@ -51,7 +51,7 @@ public class GUI_Reset_Slang extends JFrame implements ActionListener {
             writer.write(key + "`" + output + "\n");
         }
         writer.close();
-        btnReturn = new JButton("Sucess");
+        btnReturn = new JButton("Thành Công");
         btnReturn.addActionListener(this);
 
         this.add(btnReturn);
