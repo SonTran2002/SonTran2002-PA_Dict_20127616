@@ -6,15 +6,17 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class GUI_Slang extends JFrame implements ActionListener {
+    JButton btnReturn, btnExit;
     slang_Function slang;
     JLabel label1 = new JLabel("Slang Word");
     JLabel label2 = new JLabel("Definition");
@@ -108,7 +110,7 @@ public class GUI_Slang extends JFrame implements ActionListener {
                         if (slang.getSlang().containsKey(input)) {
                             int op = JOptionPane.showConfirmDialog(null, "New edited slang duplicates " +
                                             "'" + input + "'" +
-                                            " in dictionary!\nDo you want to overwrite?\nWarning: Perform " +
+                                            " in dictionary!\nWarning: Perform " +
                                             "overwriting will delete all former definitions and carry" +
                                             " current edited slang's definitions over!!!", "Duplicate warning",
                                     JOptionPane.OK_CANCEL_OPTION);
@@ -140,20 +142,32 @@ public class GUI_Slang extends JFrame implements ActionListener {
                 if (!input.equals(null)) {    //OK/Cancel option, cancel option return null
                     if (slang.getSlang().containsKey(input)) {
                         int op = JOptionPane.showConfirmDialog(null, "New slang found" +
-                                " in dictionary\nDo you want to add new definition to " + input, "Slang confirmation", JOptionPane.OK_CANCEL_OPTION);
+                                " in dictionary\nOK.      Ghi de Slang cu \nCancel. Them Slang moi" , "Slang confirmation", JOptionPane.OK_CANCEL_OPTION);
                         if (op == JOptionPane.OK_OPTION) {
-                            String newDef = JOptionPane.showInputDialog(null, "OK. ghi de Slang cu \n Cancel. Them Slang moi  \n   nhap definition" + input);
+                            String newDef = JOptionPane.showInputDialog(null, "nhap definition" + input);
                             if (slang.getSlang().containsKey(input)) {
                                 ArrayList<String> def = slang.getSlang().get(input);
+                                if(def==null){
+                                    def=new ArrayList<>();
+                                }
                                 def.add(newDef);
                                 slang.getSlang().remove(input);
                                 slang.getSlang().put(input, def);
                             }
-                            else {
-                                ArrayList<String> def = slang.getSlang().get(input);
-                                String dup= input+ "new";
-                                slang.getSlang().put(dup, def);
+                            try {
+                                saveSlang("slang.txt");
+                            } catch (Exception E) {
                             }
+                        }
+                        if(op == JOptionPane.CANCEL_OPTION){
+                            ArrayList<String> def = slang.getSlang().get(input);
+                            if(def==null){
+                                def=new ArrayList<>();
+                            }
+                            String newDef = JOptionPane.showInputDialog(null, "nhap definition");
+                            String dup= input+ "new";
+                            def.add(newDef);
+                            slang.getSlang().put(dup, def);
                             try {
                                 saveSlang("slang.txt");
                             } catch (Exception E) {
@@ -167,6 +181,7 @@ public class GUI_Slang extends JFrame implements ActionListener {
                         }
                     }
                 }
+                refreshSlangList();
             }
         });
         button_panel.add(add_btn);
@@ -203,6 +218,103 @@ public class GUI_Slang extends JFrame implements ActionListener {
         search_input = new JTextField(30);
         bottom_pn.add(search_input);
         JButton search_btn = new JButton("Search");
+
+        search_btn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (search_input.getText().equals("")){
+                    refreshSlangList();
+                    jTextArea.setText("");
+                    return;
+                }
+                if (search_criteria.getSelectedItem().toString().equals("Search by slang")) {
+                    listModel.clear();
+                    Pattern pattern = Pattern.compile(Pattern.quote(search_input.getText()), Pattern.CASE_INSENSITIVE);
+                    for (String key : slang.getSlang().keySet()) {
+                        Matcher matcher = pattern.matcher(key);
+                        if (matcher.find()) {
+                            listModel.addElement(key);
+                        }
+                    }
+                    // write to history file
+                    SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+                    Date date = new Date();
+                    try {
+                        PrintWriter writer = new PrintWriter(new FileOutputStream(new File("history.txt"),
+                                true));
+                        writer.append("\n"+formatter.format(date)+" : -" + search_input.getText()+"-Search by Slang");
+                        writer.close();
+                    } catch (FileNotFoundException ex) {
+                        ex.printStackTrace();
+                        //done
+                    }
+                }
+                else{   // search by definition
+                    listModel.clear();
+                    Pattern pattern = Pattern.compile(Pattern.quote(search_input.getText()), Pattern.CASE_INSENSITIVE);
+                    for (Map.Entry<String, ArrayList<String>> entry : slang.getSlang().entrySet()) {
+                        String key = entry.getKey();
+                        ArrayList<String> value = entry.getValue();
+                        if (value == null){
+                            listModel.addElement(key);
+                            continue;
+                        }
+                        for (String str : value) {
+                            Matcher matcher = pattern.matcher(str);
+                            if (matcher.find()) {
+                                listModel.addElement(key);
+                            }
+                        }
+                    }
+
+                    // write to history file
+                    SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+                    Date date = new Date();
+                    try {
+                        PrintWriter writer = new PrintWriter(new FileOutputStream(new File("history.txt"),
+                                true));
+                        writer.append("\n"+formatter.format(date)+" : -" + search_input.getText()+" -Search by Definition");
+                        writer.close();
+                    } catch (FileNotFoundException ex) {
+                        ex.printStackTrace();
+                        //done
+                    }
+                }
+            }
+        });
+        JButton editDef_btn = new JButton("Edit Definition");
+        editDef_btn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // allow performing definition edit here
+                String slangw= slangList.getSelectedValue().toString();
+                ArrayList<String> slangd = new ArrayList<>();
+
+                // each definition is split by a \n
+                String definitions = jTextArea.getText();
+
+                for (String def : definitions.split("\n")){
+                    slangd.add(def);
+                }
+                // now put them to hash map
+                slang.getSlang().remove(slangw);
+                slang.getSlang().put(slangw,slangd);
+                try{
+                    saveSlang("slang.txt");
+                }catch(Exception E){}
+            }
+        });
+        bottom_pn.add(search_btn);
+        bottom_pn.add(editDef_btn);
+
+        btnReturn = new JButton("Return");
+        btnExit = new JButton("Exit");
+        btnReturn.addActionListener(this);
+        btnExit.addActionListener(this);
+
+        bottom_pn.add(btnReturn);
+        bottom_pn.add(btnExit);
+        this.add(bottom_pn,BorderLayout.SOUTH);
         this.setVisible(true);
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         this.setLocation(dim.width / 2 - this.getSize().width / 2, dim.height / 2 - this.getSize().height / 2);
@@ -211,6 +323,12 @@ public class GUI_Slang extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == btnExit) {
+            System.exit(0);
+        } else if (e.getSource() == btnReturn) {
+            this.dispose();
+            new GUI();
+        }
     }
 
     private void refreshSlangList() {

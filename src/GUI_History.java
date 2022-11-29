@@ -34,7 +34,7 @@ public class GUI_History extends JFrame implements ActionListener {
         panelTable.setBackground(Color.black);
         flslang=new file_Slang();
         String data[][] = flslang.Read_History();
-        String column[] = { "STT", "Slang Word", "Definition" };
+        String column[] = { "Time", "Word Key", "Type" };
         JTable jt = new JTable(data, column);
         jt.setRowHeight(30);
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
@@ -47,7 +47,7 @@ public class GUI_History extends JFrame implements ActionListener {
         panelTable.setLayout(new GridLayout(1, 1));
         panelTable.add(sp);
 
-        // 2 Button
+
         JPanel bottomPanel = new JPanel();
         btnReturn = new JButton("Return");
         btnExit = new JButton("Exit");
@@ -83,6 +83,7 @@ public class GUI_History extends JFrame implements ActionListener {
             System.exit(0);
         } else if (e.getSource() == btnReturn) {
             this.dispose();
+            new GUI();
         }
     }
 }

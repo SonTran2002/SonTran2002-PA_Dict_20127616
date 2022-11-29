@@ -48,7 +48,7 @@ public class slang_Function {
         }
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         Date date = new Date();
-        String buf = formatter.format(date) + ": " + Search + " Search by Definition\n";
+        String buf = formatter.format(date) + ": -" + Search + " -Search by Definition\n";
         fw.write(buf);
         fw.close();
     }
@@ -77,10 +77,11 @@ public class slang_Function {
         }
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         Date date = new Date();
-        String buf = formatter.format(date) + ": " + Search + " Search by Slang\n";
+        String buf = formatter.format(date) + ": -" + Search + " -Search by Slang\n";
         fw.write(buf);
         fw.close();
     }
+
     public void addSlang(Map<String, ArrayList<String>> slang) {
         Scanner sc = new Scanner(System.in);
         System.out.println("nhap slang can them:");
@@ -116,4 +117,5 @@ public class slang_Function {
             slang.put(Search, def);
         }
     }
+
 }

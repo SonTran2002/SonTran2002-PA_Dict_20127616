@@ -21,7 +21,7 @@ public class GUI extends JFrame implements ActionListener {
         container = this.getContentPane();
         this.setTitle("Menu Window");
         this.setVisible(true);
-        this.setSize(650, 700);
+        this.setSize(650, 500);
         container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
         this.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent windowEvent) {
@@ -33,38 +33,34 @@ public class GUI extends JFrame implements ActionListener {
         panel = new JPanel();
         text.setFont(new Font("Serif", Font.BOLD, 30));
         text.setForeground(Color.red);
-        b1 = new JButton("Search by Slang");
-        b2 = new JButton("Search by definition");
-        b3 = new JButton("show history");
-        b4 = new JButton("add Slang words");
-        b5 = new JButton("edit Slang");
-        b6 = new JButton("delete Slang");
-        b7 = new JButton("random slang");
-        b8 = new JButton("Quiz");
+        b1 = new JButton("Slang Function");
+        b2 = new JButton("History Search");
+        b3 = new JButton("Reset Slang");
+        b4 = new JButton("Random Slang");
+        b5 = new JButton("Quiz Slang");
+        b6 = new JButton("Exit");
+
         b1.addActionListener(this);
         b2.addActionListener(this);
         b3.addActionListener(this);
         b4.addActionListener(this);
         b5.addActionListener(this);
         b6.addActionListener(this);
-        b7.addActionListener(this);
-        b8.addActionListener(this);
+
         b1.setFocusable(false);
         b2.setFocusable(false);
         b3.setFocusable(false);
         b4.setFocusable(false);
         b5.setFocusable(false);
         b6.setFocusable(false);
-        b7.setFocusable(false);
-        b8.setFocusable(false);
+
         panel.add(b1);
         panel.add(b2);
         panel.add(b3);
         panel.add(b4);
         panel.add(b5);
         panel.add(b6);
-        panel.add(b7);
-        panel.add(b8);
+
         panel.setLayout(new GridLayout(4, 2, 5, 5));
         container.add(text);
         container.add(Box.createRigidArea(new Dimension(0, 20)));
@@ -79,6 +75,7 @@ public class GUI extends JFrame implements ActionListener {
         if (e.getSource() == b1) {
             this.dispose();
             try {
+                new GUI_Slang();
             } catch (Exception e1) {
                 e1.printStackTrace();
             }
@@ -86,6 +83,38 @@ public class GUI extends JFrame implements ActionListener {
             this.dispose();
             try {
                 new GUI_History();
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+        }
+        else if (e.getSource() == b3) {
+            this.dispose();
+            try {
+                new GUI_Reset_Slang();
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+        }
+        else if (e.getSource() == b4) {
+            this.dispose();
+            try {
+                new GUI_Random();
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+        }
+        else if (e.getSource() == b5) {
+            this.dispose();
+            try {
+                new GUI_Quiz();
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+        }
+        else if (e.getSource() == b6) {
+            this.dispose();
+            try {
+                System.exit(0);
             } catch (Exception e1) {
                 e1.printStackTrace();
             }

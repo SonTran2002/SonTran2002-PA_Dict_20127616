@@ -6,11 +6,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args)throws IOException {
         file_Slang fl=new file_Slang();
         slang_Function s=new slang_Function();
         s.setSlang(fl.readSlang("slang.txt"));
-        s.searchBySlang(s.getSlang());
-
+        GUI gui=new GUI();
     }
 }
